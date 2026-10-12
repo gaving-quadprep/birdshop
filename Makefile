@@ -1,9 +1,16 @@
+
+# change .. to where you have the w4 binary
+export PATH := ..:$(PATH)
+# change ../wasi-sdk/build/install/ to where you have the WASI SDK installed
+export WASI_SDK_PATH := ../wasi-sdk/build/install/
+
 ifndef WASI_SDK_PATH
 $(error Download the WASI SDK (https://github.com/WebAssembly/wasi-sdk) and set $$WASI_SDK_PATH)
 endif
 
 CC = "$(WASI_SDK_PATH)/bin/clang" --sysroot="$(WASI_SDK_PATH)/share/wasi-sysroot"
 CXX = "$(WASI_SDK_PATH)/bin/clang++" --sysroot="$(WASI_SDK_PATH)/share/wasi-sysroot"
+
 
 # Optional dependency from binaryen for smaller builds
 WASM_OPT = wasm-opt
@@ -13,7 +20,7 @@ WASM_OPT_FLAGS = -Oz --zero-filled-memory --strip-producers --enable-bulk-memory
 DEBUG = 0
 
 # Compilation flags
-CFLAGS = -W -Wall -Wextra -Werror -Wno-unused -Wconversion -Wsign-conversion -MMD -MP -fno-exceptions -mbulk-memory
+CFLAGS = -W -Wall -Wextra -Werror -Wno-unused -Wconversion -Wsign-conversion -MMD -MP -fno-exceptions -mbulk-memory -Iimages
 ifeq ($(DEBUG), 1)
 	CFLAGS += -DDEBUG -O0 -g
 else
@@ -30,7 +37,6 @@ else
 endif
 
 OBJECTS = $(patsubst src/%.c, build/%.o, $(wildcard src/*.c))
-OBJECTS += $(patsubst src/%.cpp, build/%.o, $(wildcard src/*.cpp))
 DEPS = $(OBJECTS:.o=.d)
 
 ifeq '$(findstring ;,$(PATH))' ';'
@@ -63,18 +69,23 @@ else
 endif
 endif
 
+images/%.h: images/%.png
+	@echo \#ifndef _image_$(subst .,_,$(notdir $@)) > $@
+	@echo \#define _image_$(subst .,_,$(notdir $@)) >> $@
+	@w4 png2src --c $< >> $@
+	@echo \#endif >> $@
+
+
 # Compile C sources
-build/%.o: src/%.c
+build/%.o: src/%.c $(subst .png,.h,$(wildcard images/*.png))
 	@$(MKDIR_BUILD)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-# Compile C++ sources
-build/%.o: src/%.cpp
-	@$(MKDIR_BUILD)
-	$(CXX) -c $< -o $@ $(CFLAGS)
-
-.PHONY: clean
+.PHONY: clean run
 clean:
 	$(RMDIR) build
+	@rm -f images/*.h
+run: build/cart.wasm
+	@ w4 run build/cart.wasm
 
 -include $(DEPS)
