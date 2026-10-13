@@ -1,10 +1,20 @@
 #include "wasm4.h"
 #include "toolbar.h"
 #include "testimage.h"
+#include "testimage2.h"
+#include "click.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct toolbar *tb;
+char message[] = "No item clicked";
+
+void handleclick(struct toolbar *ctb, size_t item) {
+    (void)ctb; // prevent unused parameter error
+    strcpy(message, "Item 0 clicked");
+    message[5] += item;
+};
 
 void start() {
     tb = malloc(sizeof(struct toolbar) + 5 * sizeof(struct tbentry));
@@ -24,16 +34,18 @@ void start() {
             .colors = 0x0234,
             .hover_colors = 0x2344,
             .name = "Item",
-            .onclicked = NULL,
+            .onclicked = &handleclick,
         };
     }
 }
 void update() {
     *DRAW_COLORS = 2;
-    text("Hello from C!", 10, 10);
+    text(message, 10, 10);
 
     *DRAW_COLORS = 0x0234;
     blit(testimage, 64, 64, 16, 16, BLIT_2BPP);
 
     draw_toolbar(tb);
+
+    updateclick();
 }

@@ -4,12 +4,14 @@
 #include <stdint.h>
 #include <stddef.h>
 
+struct toolbar; // declare it so tbentry can refer to it
+
 struct tbentry {
 	const uint8_t *image;
 	uint16_t colors;
 	uint16_t hover_colors;
 	const char *name;
-	void (*onclicked)();
+	void (*onclicked)(struct toolbar*, size_t);
 };
 
 struct toolbar {

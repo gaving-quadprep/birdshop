@@ -1,5 +1,6 @@
 #include "wasm4.h"
 #include "toolbar.h"
+#include "click.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -25,11 +26,15 @@ void draw_toolbar(struct toolbar *tb) {
 	for (size_t i = 0; i < tb->itemcount; i++) {
 		struct tbentry entry = tb->items[i];
 
+		*DRAW_COLORS = entry.colors;
 		if (*MOUSE_X > imagexpos && *MOUSE_X < imagexpos + tb->imagew
 				&& *MOUSE_Y > imageypos && *MOUSE_Y < imageypos + tb->imageh) {
-			*DRAW_COLORS = entry.hover_colors;
-		} else {
-			*DRAW_COLORS = entry.colors;
+			if (!(*MOUSE_BUTTONS & MOUSE_LEFT))
+				*DRAW_COLORS = entry.hover_colors;
+			if (isleftclick()) {
+				if (entry.onclicked != NULL)
+					(*entry.onclicked)(tb, i);
+			}
 		}
 
 		if (entry.image != NULL)
