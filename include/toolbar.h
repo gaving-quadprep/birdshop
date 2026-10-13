@@ -3,18 +3,12 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include "item.h"
+#include "direction.h"
 
-struct toolbar; // declare it so tbentry can refer to it
+typedef struct toolbar {
+	Direction side;
 
-struct tbentry {
-	const uint8_t *image;
-	uint16_t colors;
-	uint16_t hover_colors;
-	const char *name;
-	void (*onclicked)(struct toolbar*, size_t);
-};
-
-struct toolbar {
 	uint8_t xpadding;
 	uint8_t ypadding;
 	uint8_t itempadding;
@@ -23,9 +17,16 @@ struct toolbar {
 	uint8_t imageh;
 
 	size_t itemcount;
-	struct tbentry items[];
-};
+	size_t maxitems; // it should be able to hold this many items in its buffer
+	void (*onclicked)(struct toolbar*, size_t);
+	uint16_t colors;
+	struct item *items[];
+} Toolbar;
 
-void draw_toolbar(struct toolbar *tb);
+void drawtoolbar(Toolbar *tb);
+
+void flatten(Toolbar *tb);
+
+void insert(Toolbar *tb, Item *item, size_t position);
 
 #endif
