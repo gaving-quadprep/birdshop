@@ -1,5 +1,7 @@
-#ifndef _CLICK_H
-#define _CLICK_H
+#ifndef _MOUSE_H
+#define _MOUSE_H
+
+#include "rectangle.h"
 #include <stdbool.h>
 
 void updateclick();
@@ -7,5 +9,7 @@ void updateclick();
 bool isleftclick();
 bool ismiddleclick();
 bool isrightclick();
+
+bool ismousewithin(Rect16 area);
 
 #endif

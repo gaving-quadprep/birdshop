@@ -3,7 +3,7 @@
 #include "testimage.h"
 #include "item.h"
 #include "helditem.h"
-#include "click.h"
+#include "mouse.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,17 +12,16 @@ Toolbar *tb;
 char message[] = "No item clicked";
 
 void handleclick(struct toolbar *ctb, size_t item) {
-    (void)ctb; // prevent unused parameter error
     strcpy(message, "Item 0 clicked");
     message[5] += item;
 
     if (helditem == NULL) {
-        helditem = ctb->items[item];
-        ctb->items[item] = NULL;
-        flatten(ctb);
+        helditem = take(ctb, item);
     } else {
-        insert(ctb, helditem, item);
-        helditem = NULL;
+        if (ctb->items[item] == NULL) {
+            ctb->items[item] = helditem;
+            helditem = NULL;
+        }
     }
 };
 
@@ -62,6 +61,7 @@ void update() {
 
     drawtoolbar(tb);
     drawhelditem();
+    checkplace(tb);
 
     updateclick();
 }

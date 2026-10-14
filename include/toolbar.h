@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include "item.h"
 #include "direction.h"
+#include "rectangle.h"
 
 typedef struct toolbar {
 	Direction side;
@@ -23,10 +24,18 @@ typedef struct toolbar {
 	struct item *items[];
 } Toolbar;
 
+Rect16 getsize(Toolbar *tb);
+
 void drawtoolbar(Toolbar *tb);
 
 void flatten(Toolbar *tb);
 
+void mvitems(Toolbar *tb, size_t src, size_t dst, size_t cnt);
+
 void insert(Toolbar *tb, Item *item, size_t position);
+
+Item *take(Toolbar *tb, size_t position);
+
+void checkplace(Toolbar *tb);
 
 #endif

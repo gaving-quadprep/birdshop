@@ -1,4 +1,5 @@
 #include "wasm4.h"
+#include "rectangle.h"
 #include <stdbool.h>
 
 // wasm4 doesn't provide a way to see if a mouse was clicked,
@@ -22,4 +23,9 @@ bool ismiddleclick() {
 }
 bool isrightclick() {
 	return (*MOUSE_BUTTONS & MOUSE_RIGHT) && !prevright;
+}
+
+bool ismousewithin(Rect16 area) {
+	return *MOUSE_X > area.x && *MOUSE_X < area.x + area.width
+		&& *MOUSE_Y > area.y && *MOUSE_Y < area.y + area.height;
 }
