@@ -1,6 +1,7 @@
 #include "wasm4.h"
 #include "toolbar.h"
-#include "testimage.h"
+#include "screwdriver.h"
+#include "heatgun.h"
 #include "item.h"
 #include "helditem.h"
 #include "mouse.h"
@@ -45,19 +46,18 @@ void start() {
     for (size_t i = 0; i < tb->itemcount; i++) {
         tb->items[i] = malloc(sizeof(Item));
         *tb->items[i] = (Item){
-            .image = testimage,
-            .colors = 0x0234,
-            .hover_colors = 0x2344,
-            .name = "Item",
+            .image = screwdriver,
+            .colors = 0x4320,
+            .hover_colors = 0x4432,
+            .name = "Screwdriver",
         };
     }
+	tb->items[1]->image = heatgun;
+	tb->items[1]->name = "Heat Gun";
 }
 void update() {
     *DRAW_COLORS = 2;
     text(message, 10, 10);
-
-    *DRAW_COLORS = 0x0234;
-    blit(testimage, 64, 64, 16, 16, BLIT_2BPP);
 
     drawtoolbar(tb);
     drawhelditem();
