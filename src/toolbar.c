@@ -3,6 +3,7 @@
 #include "mouse.h"
 #include "direction.h"
 #include "helditem.h"
+#include "label.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -58,8 +59,11 @@ void drawtoolbar(Toolbar *tb) {
 		if (item != NULL) {
 			*DRAW_COLORS = item->colors;
 			if (within) {
-				if (!(*MOUSE_BUTTONS & MOUSE_LEFT))
+				if (!(*MOUSE_BUTTONS & MOUSE_LEFT)) {
+					if (item->name != NULL)
+						drawlabeltb(tb, 24, imagexpos + (tb->imagew / 2), imageypos + (tb->imageh / 2), item->name);
 					*DRAW_COLORS = item->hover_colors;
+				}
 			}
 			if (item->image != NULL)
 				blit(item->image, imagexpos, imageypos, tb->imagew, tb->imageh, BLIT_2BPP);
@@ -107,7 +111,7 @@ Item *take(Toolbar *tb, size_t position) {
 	return ret;
 }
 
-void checkplace(Toolbar *tb) {
+void addspacer(Toolbar *tb) {
 	static int spacerpos = -1;
 	Rect16 tbpos = getsize(tb);
 	if (helditem != NULL) {

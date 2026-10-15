@@ -29,7 +29,7 @@ void handleclick(struct toolbar *ctb, size_t item) {
 void start() {
     tb = malloc(sizeof(Toolbar) + 8 * sizeof(Item*));
     *tb = (Toolbar){
-        .side = RIGHT,
+        .side = DOWN,
 
         .xpadding = 2,
         .ypadding = 2,
@@ -61,7 +61,7 @@ void update() {
 
     drawtoolbar(tb);
     drawhelditem();
-    checkplace(tb);
+    addspacer(tb);
 
     updateclick();
 }

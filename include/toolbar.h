@@ -36,6 +36,6 @@ void insert(Toolbar *tb, Item *item, size_t position);
 
 Item *take(Toolbar *tb, size_t position);
 
-void checkplace(Toolbar *tb);
+void addspacer(Toolbar *tb);
 
 #endif
