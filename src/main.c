@@ -5,6 +5,8 @@
 #include "item.h"
 #include "helditem.h"
 #include "mouse.h"
+#include "framecnt.h"
+#include "7segment.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,10 +60,13 @@ void start() {
 void update() {
     *DRAW_COLORS = 2;
     text(message, 10, 10);
+    *DRAW_COLORS = 0x0042;
+	draw7segment(0, 0, '0' + ((framecount / 60) % 10));
 
     drawtoolbar(tb);
     drawhelditem();
     addspacer(tb);
 
     updateclick();
+	framecount++;
 }
