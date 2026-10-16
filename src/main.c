@@ -1,9 +1,9 @@
 #include "wasm4.h"
+#include "rectangle.h"
 #include "toolbar.h"
 #include "screwdriver.h"
 #include "heatgun.h"
 #include "item.h"
-#include "helditem.h"
 #include "mouse.h"
 #include "framecnt.h"
 #include "7segment.h"
@@ -19,7 +19,7 @@ void handleclick(struct toolbar *ctb, size_t item) {
     message[5] += item;
 
     if (helditem == NULL) {
-        helditem = take(ctb, item);
+        helditem = takeitem(ctb, item);
     } else {
         if (ctb->items[item] == NULL) {
             ctb->items[item] = helditem;
@@ -37,8 +37,8 @@ void start() {
         .ypadding = 2,
         .itempadding = 1,
 
-        .imagew = ITEM_WIDTH,
-        .imageh = ITEM_HEIGHT,
+        .imagew = 16,
+        .imageh = 16,
 
         .itemcount = 5,
         .maxitems = 8,
@@ -49,12 +49,15 @@ void start() {
         tb->items[i] = malloc(sizeof(Item));
         *tb->items[i] = (Item){
             .image = screwdriver,
+            .imagetb = screwdriver,
+			.dim = (Rectangle) {0, 0, 16, 16},
             .colors = 0x4320,
             .hover_colors = 0x4432,
             .name = "Screwdriver",
         };
     }
 	tb->items[1]->image = heatgun;
+	tb->items[1]->imagetb = heatgun;
 	tb->items[1]->name = "Heat Gun";
 }
 void update() {

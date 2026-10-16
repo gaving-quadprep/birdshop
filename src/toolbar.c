@@ -2,7 +2,6 @@
 #include "toolbar.h"
 #include "mouse.h"
 #include "direction.h"
-#include "helditem.h"
 #include "label.h"
 
 #include <stddef.h>
@@ -65,8 +64,8 @@ void drawtoolbar(Toolbar *tb) {
 					*DRAW_COLORS = item->hover_colors;
 				}
 			}
-			if (item->image != NULL)
-				blit(item->image, imagexpos, imageypos, tb->imagew, tb->imageh, BLIT_2BPP);
+			if (item->imagetb != NULL)
+				blit(item->imagetb, imagexpos, imageypos, tb->imagew, tb->imageh, BLIT_2BPP);
 		}
 		if (ISVERTICAL(tb->side))
 			imagexpos += tb->imagew + tb->itempadding;
@@ -104,7 +103,7 @@ void insert(Toolbar *tb, Item *item, size_t position) {
 	tb->itemcount++;
 }
 
-Item *take(Toolbar *tb, size_t position) {
+Item *takeitem(Toolbar *tb, size_t position) {
 	Item *ret = tb->items[position];
 	tb->items[position] = NULL;
 	flatten(tb);

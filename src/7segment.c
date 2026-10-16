@@ -99,7 +99,7 @@ static void drawsegment(int16_t x, int16_t y, uint8_t segment, bool on) {
 
 void drawclock() {
 	*DRAW_COLORS = 0x0034;
-	rect(135, 0, 26, 11);
+	rect(135, 0, 25, 11);
 	uint32_t seconds = framecnt / 60;
 	// in this game 1 second is 1 minute
 	uint8_t minutes = seconds % 60;
