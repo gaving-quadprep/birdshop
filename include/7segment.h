@@ -4,5 +4,6 @@
 #include <stdint.h>
 
 void draw7segment(int16_t x, int16_t y, char digit);
+void drawclock();
 
 #endif

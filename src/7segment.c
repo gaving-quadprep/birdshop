@@ -1,4 +1,6 @@
 #include "wasm4.h"
+#include "7segment.h"
+#include "framecnt.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -93,4 +95,28 @@ static void drawsegment(int16_t x, int16_t y, uint8_t segment, bool on) {
 			on ? rect(x+4, y+7, 1, 1) : hline(x+4, y+7, 1);
 			break; */
 	}
+}
+
+void drawclock() {
+	*DRAW_COLORS = 0x0034;
+	rect(135, 0, 26, 11);
+	uint32_t seconds = framecnt / 60;
+	// in this game 1 second is 1 minute
+	uint8_t minutes = seconds % 60;
+	uint8_t hours = ((seconds / 60) % 12);
+	if (hours == 0)
+		hours = 12;
+	char hourdigit1 = '0' + (hours / 10), hourdigit2 = '0' + (hours % 10);
+	char minutedigit1 = '0' + (minutes / 10), minutedigit2 = '0' + (minutes % 10);
+
+	*DRAW_COLORS = 0x0013;
+	draw7segment(137, 2, hourdigit1);
+	draw7segment(142, 2, hourdigit2);
+
+	rect(147, 4, 1, 1);
+	rect(147, 7, 1, 1);
+
+	*DRAW_COLORS = 0x0013;
+	draw7segment(149, 2, minutedigit1);
+	draw7segment(154, 2, minutedigit2);
 }

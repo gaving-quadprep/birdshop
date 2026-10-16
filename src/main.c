@@ -60,13 +60,14 @@ void start() {
 void update() {
     *DRAW_COLORS = 2;
     text(message, 10, 10);
-    *DRAW_COLORS = 0x0042;
-	draw7segment(0, 0, '0' + ((framecount / 60) % 10));
+
+    drawclock();
 
     drawtoolbar(tb);
     drawhelditem();
     addspacer(tb);
 
+
     updateclick();
-	framecount++;
+	framecnt++;
 }
