@@ -6,6 +6,8 @@
 #include "item.h"
 
 typedef struct bird {
+	int16_t x;
+	int16_t y;
 	struct {
 		Item *body;
 		Item *eye;
@@ -20,10 +22,11 @@ typedef struct bird {
 	
 	// each one of these stores an x and y coordinate
 	// so getting the nth screw would be screws[n*2]
-	uint8_t *glue;
+	// only int8_t because it's relative to the bird which should be that small
+	int8_t *glue;
 	size_t gluecount;
 	
-	uint8_t *screws;
+	int8_t *screws;
 	size_t screwcount;
 	
 	
@@ -32,6 +35,5 @@ typedef struct bird {
 void drawbird(Bird *bird);
 void _do(Item *item, void *data);
 void foreachpart(Bird *bird, void *otherdata, void (*fn)(Item*, void*));
-void movebird(Bird *bird, int16_t x, int16_t y);
 
 #endif

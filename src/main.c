@@ -1,4 +1,5 @@
 #include "wasm4.h"
+#include "pigeon.h"
 #include "rectangle.h"
 #include "toolbar.h"
 #include "screwdriver.h"
@@ -12,6 +13,7 @@
 #include <string.h>
 
 Toolbar *tb;
+Bird *current_bird;
 char message[] = "No item clicked";
 
 void handleclick(struct toolbar *ctb, size_t item) {
@@ -50,7 +52,7 @@ void start() {
         *tb->items[i] = (Item){
             .image = screwdriver,
             .imagetb = screwdriver,
-			.dim = (Rectangle) {0, 0, 16, 16},
+			.dim = (Rect16) {0, 0, 16, 16},
             .colors = 0x4320,
             .hover_colors = 0x4432,
             .name = "Screwdriver",
@@ -59,17 +61,20 @@ void start() {
 	tb->items[1]->image = heatgun;
 	tb->items[1]->imagetb = heatgun;
 	tb->items[1]->name = "Heat Gun";
+
+    current_bird = mkpigeon();
+    current_bird->x = 64;
+    current_bird->y = 64;
 }
 void update() {
     *DRAW_COLORS = 2;
     text(message, 10, 10);
 
     drawclock();
-
+    drawbird(current_bird);
     drawtoolbar(tb);
     drawhelditem();
     addspacer(tb);
-
 
     updateclick();
 	framecnt++;

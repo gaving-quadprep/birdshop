@@ -7,7 +7,7 @@
 
 typedef struct item {
 	const uint8_t *image;
-	Rectangle dim;
+	Rect16 dim;
 	
 	// 16x16 used for icon
 	const uint8_t *imagetb;
@@ -22,7 +22,7 @@ typedef struct item {
 extern Item *helditem;
 
 void drawitem(Item *item);
-
+void drawitemat(Item *item, int16_t x, int16_t y);
 void drawhelditem();
 
 #endif
