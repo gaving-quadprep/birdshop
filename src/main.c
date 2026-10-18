@@ -49,7 +49,7 @@ void start() {
     };
     for (size_t i = 0; i < tb->itemcount; i++) {
         tb->items[i] = malloc(sizeof(Item));
-        *tb->items[i] = (Item){
+        *tb->items[i] = (Item) {
             .image = screwdriver,
             .imagetb = screwdriver,
 			.dim = (Rect16) {0, 0, 16, 16},
@@ -73,8 +73,8 @@ void update() {
     drawclock();
     drawbird(current_bird);
     drawtoolbar(tb);
-    drawhelditem();
     addspacer(tb);
+    drawhelditem();
 
     updateclick();
 	framecnt++;

@@ -1,12 +1,32 @@
 #include "wasm4.h"
 #include "bird.h"
-#include "item.h"
+#include "mouse.h"
+
 #include <stddef.h>
+#include <stdbool.h>
 
 static void _drawitemat(Item *item, void *data);
+static void _ismouseinbird(Item *item, void *data);
+
+typedef struct {
+	Bird *bird;
+	bool *ret;
+} _ismouseinbird_params;
 
 void drawbird(Bird *bird) {
 	foreachpart(bird, bird, &_drawitemat);
+	for (size_t i = 0; i < bird->gluecount; i++) {
+		*DRAW_COLORS = 0x0033;
+		Fastener f = bird->glue[i];
+		if (f.connected != NULL)
+			rect(f.x, f.y, 1, 1);
+	}
+	for (size_t i = 0; i < bird->screwcount; i++) {
+		*DRAW_COLORS = 0x0044;
+		Fastener f = bird->screws[i];
+		if (f.connected != NULL)
+			rect(f.x, f.y, 1, 1);
+	}
 }
 
 // if a function only takes an item as a parameter, this allows you to call it from foreachpart
@@ -32,5 +52,27 @@ void foreachpart(Bird *bird, void *otherdata, void (*fn)(Item*, void*)) {
 		for (size_t i = 0; i < bird->otherpartcount; i++) {
 			fn(bird->otherparts[i], otherdata);
 		}
+	}
+}
+
+bool ismouseinbird(Bird *bird) {
+	bool ret = false;
+	_ismouseinbird_params params = (_ismouseinbird_params) {
+		.bird = bird,
+		.ret = &ret
+	};
+	foreachpart(bird, &params, &_ismouseinbird);
+	return ret;
+}
+
+// this is kinda messy but it
+
+void _ismouseinbird(Item *item, void *data) {
+	_ismouseinbird_params *params = (_ismouseinbird_params*)data;
+	if(!*(params->ret)) {
+		Rect16 rect = item->dim;
+		rect.x += params->bird->x;
+		rect.y += params->bird->y;
+		*(params->ret) = ismousewithin(item->dim);
 	}
 }

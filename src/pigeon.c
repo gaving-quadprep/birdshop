@@ -1,15 +1,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "pigeon.h"
+
 #include "pigeonbody.h"
 #include "pigeonfeet.h"
 #include "pigeontail.h"
 #include "pigeonwing.h"
 #include "pigeonhead.h"
 #include "pigeoneye.h"
-
-#include "bird.h"
-#include "pigeon.h"
 
 Bird *mkpigeon() {
 	Bird *ret = malloc(sizeof(Bird));

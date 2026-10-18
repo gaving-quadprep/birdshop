@@ -2,8 +2,16 @@
 #define _BIRD_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "rectangle.h"
 #include "item.h"
+
+typedef struct fastener {
+	int16_t x;
+	int16_t y;
+	Item *item;
+	Item *connected;
+} Fastener;
 
 typedef struct bird {
 	int16_t x;
@@ -19,14 +27,11 @@ typedef struct bird {
 	
 	Item **otherparts;
 	size_t otherpartcount;
-	
-	// each one of these stores an x and y coordinate
-	// so getting the nth screw would be screws[n*2]
-	// only int8_t because it's relative to the bird which should be that small
-	int8_t *glue;
+
+	Fastener *glue;
 	size_t gluecount;
 	
-	int8_t *screws;
+	Fastener *screws;
 	size_t screwcount;
 	
 	
