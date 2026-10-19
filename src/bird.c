@@ -1,6 +1,7 @@
 #include "wasm4.h"
 #include "bird.h"
 #include "mouse.h"
+#include "framecnt.h"
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -18,14 +19,16 @@ void drawbird(Bird *bird) {
 	for (size_t i = 0; i < bird->gluecount; i++) {
 		*DRAW_COLORS = 0x0033;
 		Fastener f = bird->glue[i];
-		if (f.connected != NULL)
-			rect(f.x, f.y, 1, 1);
+		if (f.isattached)
+			rect(f.x + bird->x, f.y + bird->y, 1, 1);
 	}
-	for (size_t i = 0; i < bird->screwcount; i++) {
-		*DRAW_COLORS = 0x0044;
-		Fastener f = bird->screws[i];
-		if (f.connected != NULL)
-			rect(f.x, f.y, 1, 1);
+	if (helditem != NULL && helditem->id == 1) {
+		for (size_t i = 0; i < bird->screwcount; i++) {
+			*DRAW_COLORS = 0x0011 * ((framecnt / 8) % 4);
+			Fastener f = bird->screws[i];
+			if (f.isattached)
+				rect(f.x + bird->x, f.y + bird->y, 1, 1);
+		}
 	}
 }
 

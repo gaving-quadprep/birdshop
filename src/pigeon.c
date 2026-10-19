@@ -83,11 +83,11 @@ Bird *mkpigeon() {
 			.height = 13
 		},
 		.imagetb = NULL, // TODO what should i do here
-		.colors = 0x4430,
+		.colors = 0x4310,
 		.hover_colors = 0x4442,
 		.name = "Pigeon Head",
 	};
-
+	/*
 	ret->parts.eye = malloc(sizeof(Item));
 	*ret->parts.eye = (Item) {
 		.image = pigeoneye,
@@ -101,6 +101,58 @@ Bird *mkpigeon() {
 		.colors = 0x4401,
 		.hover_colors = 0x4422,
 		.name = "Pigeon Eye",
+	};*/
+
+	ret->gluecount = 7;
+	ret->glue = malloc(sizeof(Fastener) * ret->gluecount);
+	ret->glue[0] = (Fastener) {
+		.x = 13,
+		.y = 8,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
+	};
+	ret->glue[1] = (Fastener) {
+		.x = 14,
+		.y = 9,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
+	};
+	ret->glue[2] = (Fastener) {
+		.x = 15,
+		.y = 10,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
+	};
+	ret->glue[3] = (Fastener) {
+		.x = 16,
+		.y = 11,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
+	};
+	ret->glue[4] = (Fastener) {
+		.x = 17,
+		.y = 12,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
+	};
+	ret->glue[5] = (Fastener) {
+		.x = 18,
+		.y = 12,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
+	};
+	ret->glue[6] = (Fastener) {
+		.x = 19,
+		.y = 11,
+		.item = ret->parts.body,
+		.connected = ret->parts.head,
+		.isattached = true
 	};
 	
 	return ret;

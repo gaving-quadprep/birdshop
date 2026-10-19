@@ -80,14 +80,10 @@ void flatten(Toolbar *tb) {
 	for (size_t i = 0; i < tb->itemcount; i++) {
 		if (tb->items[i] == NULL) {
 			size_t tomove = (tb->itemcount - 1) - i;
-			mvitems(tb, i + 1, i, tomove);
+			mvitems(tb->items, i + 1, i, tomove);
 			tb->itemcount--;
 		}
 	}
-}
-
-void mvitems(Toolbar *tb, size_t src, size_t dst, size_t cnt) {
-	memmove(&tb->items[dst], &tb->items[src], cnt * sizeof(Item*));
 }
 
 void insert(Toolbar *tb, Item *item, size_t position) {
@@ -98,7 +94,7 @@ void insert(Toolbar *tb, Item *item, size_t position) {
 	if (position > tb->itemcount)
 		position = tb->itemcount;
 	size_t tomove = tb->itemcount - position;
-	mvitems(tb, position, position + 1, tomove);
+	mvitems(tb->items, position, position + 1, tomove);
 	tb->items[position] = item;
 	tb->itemcount++;
 }
@@ -124,9 +120,9 @@ void addspacer(Toolbar *tb) {
 			if (spacerpos != -1) {
 				int tomove = spacerpos - hoverpos;
 				if (tomove < 0) {
-					mvitems(tb, spacerpos + 1, spacerpos, -tomove);
+					mvitems(tb->items, spacerpos + 1, spacerpos, -tomove);
 				} else {
-					mvitems(tb, hoverpos, hoverpos + 1, tomove);
+					mvitems(tb->items, hoverpos, hoverpos + 1, tomove);
 				}
 				tb->items[hoverpos] = NULL;
 			} else {
@@ -141,3 +137,15 @@ void addspacer(Toolbar *tb) {
 		spacerpos = -1;
 	}
 }
+
+// default function for onclicked
+void handleclick(struct toolbar *tb, size_t item) {
+	if (helditem == NULL) {
+		helditem = takeitem(tb, item);
+	} else {
+		if (tb->items[item] == NULL) {
+			tb->items[item] = helditem;
+			helditem = NULL;
+		}
+	}
+};

@@ -25,17 +25,11 @@ typedef struct toolbar {
 } Toolbar;
 
 Rect16 getsize(Toolbar *tb);
-
 void drawtoolbar(Toolbar *tb);
-
 void flatten(Toolbar *tb);
-
-void mvitems(Toolbar *tb, size_t src, size_t dst, size_t cnt);
-
 void insert(Toolbar *tb, Item *item, size_t position);
-
 Item *takeitem(Toolbar *tb, size_t position);
-
 void addspacer(Toolbar *tb);
+void handleclick(struct toolbar *tb, size_t item);
 
 #endif

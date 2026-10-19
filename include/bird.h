@@ -11,6 +11,7 @@ typedef struct fastener {
 	int16_t y;
 	Item *item;
 	Item *connected;
+	bool isattached;
 } Fastener;
 
 typedef struct bird {
